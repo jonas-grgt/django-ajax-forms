@@ -8,4 +8,3 @@ local_settings.py
 docs/_*
 docs/build
 docs/Makefile
-docs/conf.py
