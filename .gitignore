@@ -2,3 +2,10 @@
 *.pot
 *.pyc
 local_settings.py
+
+# Ignore documenation build data
+
+docs/_*
+docs/build
+docs/Makefile
+docs/conf.py

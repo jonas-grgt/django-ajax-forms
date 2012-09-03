@@ -32,7 +32,7 @@ class AjaxValidatingFormMixin(JSONResponseMixin, TemplateResponseMixin):
         return form_class
 
     def form_valid(self, form):
-        return HttpResponse({ 'valid': True })
+        return self.render_to_json_response({ 'valid': True })
 
     def form_invalid(self, form):
         # Get the BoundFields which contains the errors attribute 

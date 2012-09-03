@@ -12,11 +12,14 @@
             fields: false,
             event: 'submit',
             submitHandler: null,
-            successCallback: null,
+            fieldSuccessCallback: null,
+            formSuccessCallback: null,
+            callback: null
         }, settings);
 
-        function ajaxForm(form, data, field, successCallback) {
+        function ajaxForm(form, data, field, formSuccessCallback) {
             var field = field || false;
+            var formSuccessCallback = formSuccessCallback || false;
             $.ajax({
                 async: false,
                 data: data,
@@ -27,9 +30,17 @@
                 },
                 success: function(data, textStatus) {
                     status = data.valid;
-                    if (!data.valid)    {
+                    if (data.valid) {     
+                        if(settings.fieldSuccessCallback) {
+                            settings.fieldSuccessCallback($('#' + field));
+                        }
+                        $(form).find('ul.errorlist').remove();
+                        if(formSuccessCallback) {
+                            formSuccessCallback();
+                        }
+                    } else {
                         if (settings.callback)  {
-                            settings.callback(data, form);
+                            settings.callback($(form), data);
                         }
                         else    {
                             var get_form_error_position = function(key) {
@@ -42,9 +53,9 @@
                                 return inputs(form).filter(filter).parent();
                             };
                             if (settings.type == 'p')    {
-                                form.find('ul.errorlist').remove();
-                                if(!data.errors[field] && successCallback) {
-                                    successCallback($('#' + field));
+                                if(!data.errors[field] && settings.fieldSuccessCallback) {
+                                    $('#' + field).parent().prev('ul.errorlist').remove();
+                                    settings.fieldSuccessCallback($('#' + field));
                                 }
                                 $.each(data.errors, function(key, val)  {
                                     if (key.indexOf('__all__') >= 0)   {
@@ -56,19 +67,26 @@
                                     else {
                                         if(field) { 
                                             if(field == key && $('#' + field).val().length > 0) {
-                                                $('#' + key).prev().before('<ul class="errorlist"><li>' + val + '</li></ul>');
+                                                if(settings.fieldInvalidCallback) {
+                                                    fieldInvalidCallback($('#' + field));
+                                                }
+                                                $('#' + field).parent().prev('ul.errorlist').remove();
+                                                $('#' + key).parent().before('<ul class="errorlist"><li>' + val + '</li></ul>');
                                             }
                                         } else {
+                                            if(settings.fieldInvalidCallback) {
+                                                fieldInvalidCallback($('#' + field));
+                                            }
+                                            $('#' + field).parent().prev('ul.errorlist').remove();
                                             $('#' + key).parent().before('<ul class="errorlist"><li>' + val + '</li></ul>');
                                         }
                                     }
                                 });
                             }
                             if (settings.type == 'table')   {
-                                inputs(form).prev('ul.errorlist').remove();
-                                form.find('tr:has(ul.errorlist)').remove();
-                                if(!data.errors[field] && successCallback) {
-                                    successCallback($('#' + field));
+                                if(!data.errors[field] && settings.fieldSuccessCallback) {
+                                    $('#' + field).siblings("ul.errorlist").remove();
+                                    settings.fieldSuccessCallback($('#' + field));
                                 }
                                 $.each(data.errors, function(key, val)  {
                                     if (key.indexOf('__all__') >= 0)   {
@@ -77,19 +95,27 @@
                                     else {
                                         if(field) {
                                             if(field == key && $('#' + field).val().length > 0) {
+                                                if(settings.fieldInvalidCallback) {
+                                                    fieldInvalidCallback($('#' + field));
+                                                }
+                                                $('#' + field).siblings("ul.errorlist").remove();
                                                 $('#' + key).before('<ul class="errorlist"><li>' + val + '</li></ul>');
                                             }
                                         } else {
+                                            if(settings.fieldInvalidCallback) {
+                                                fieldInvalidCallback($('#' + field));
+                                            }
+                                            $('#' + field).siblings("ul.errorlist").remove();
                                             $('#' + key).before('<ul class="errorlist"><li>' + val + '</li></ul>');
                                         }
                                     }
                                 });
                             }
                             if (settings.type == 'ul')  {
-                                inputs(form).prev().prev('ul.errorlist').remove();
-                                form.find('li:has(ul.errorlist)').remove();
-                                if(!data.errors[field] && successCallback) {
-                                    successCallback($('#' + field));
+                                if(!data.errors[field] && settings.fieldSuccessCallback) {
+                                    $('#' + field).siblings('ul.errorlist').remove();
+                                    // Clear errors for this field if present
+                                    setttings.fieldSuccessCallback($('#' + field));
                                 }
                                 $.each(data.errors, function(key, val)  {
                                     if (key.indexOf('__all__') >= 0)   {
@@ -98,9 +124,17 @@
                                     else {
                                         if(field) {
                                             if(field == key && $('#' + field).val().length > 0) {
+                                                if(settings.fieldInvalidCallback) {
+                                                    fieldInvalidCallback($('#' + field));
+                                                }
+                                                $('#' + field).siblings('ul.errorlist').remove();
                                                 $('#' + key).prev().before('<ul class="errorlist"><li>' + val + '</li></ul>');
                                             }
                                         } else {
+                                            if(settings.fieldInvalidCallback) {
+                                                fieldInvalidCallback($('#' + field));
+                                            }
+                                            visibleErrors[key] = val;
                                             $('#' + key).prev().before('<ul class="errorlist"><li>' + val + '</li></ul>');
                                         }
                                     }
@@ -122,16 +156,16 @@
                     $('#' + el).each(function(index, el) {
                         $(el).on(settings.event, function(event) {
                             field = $(this).attr("id");
-                            ajaxForm($(form), $(form).serialize(), field, settings.successCallback);
+                            ajaxForm($(form), $(form).serialize(), field, null);
                         });
                     });
                 });
             } else {
                 var form = $(this);
-                $('input, checkbox, select',this).each(function(index, el) {
+                $('input, checkbox, select',this).not('input[type=submit]').each(function(index, el) {
                     $(el).on(settings.event, function(event) {
                         field = $(this).attr("id");
-                        ajaxForm($(form), $(form).serialize(), field, settings.successCallback);
+                        ajaxForm($(form), $(form).serialize(), field, null);
                     });
                 });
             }
@@ -139,7 +173,8 @@
 
         $(this).on("submit", function(event) {
             event.preventDefault();
-            ajaxForm($(this), $(this).serialize(), null, settings.successCallback);
+            $(this).find('ul.errorlist').remove();
+            ajaxForm($(this), $(this).serialize(), null, settings.formSuccessCallback);
         });
     };
 })(jQuery);
