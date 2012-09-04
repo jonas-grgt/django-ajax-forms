@@ -15,3 +15,6 @@ Contents:
     usage
     serving-ajax-validation-media-server
 
+
+Project source: https://github.com/jonasgeiregat/django-ajax-form-mixin
+
