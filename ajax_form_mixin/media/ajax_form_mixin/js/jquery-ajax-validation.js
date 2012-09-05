@@ -14,6 +14,7 @@
             submitHandler: null,
             fieldSuccessCallback: null,
             formSuccessCallback: null,
+            fieldInvalidCallback: null,
             callback: null
         }, settings);
 
@@ -68,14 +69,14 @@
                                         if(field) { 
                                             if(field == key && $('#' + field).val().length > 0) {
                                                 if(settings.fieldInvalidCallback) {
-                                                    fieldInvalidCallback($('#' + field));
+                                                    settings.fieldInvalidCallback($('#' + field));
                                                 }
                                                 $('#' + field).parent().prev('ul.errorlist').remove();
                                                 $('#' + key).parent().before('<ul class="errorlist"><li>' + val + '</li></ul>');
                                             }
                                         } else {
                                             if(settings.fieldInvalidCallback) {
-                                                fieldInvalidCallback($('#' + field));
+                                                settings.fieldInvalidCallback($('#' + field));
                                             }
                                             $('#' + field).parent().prev('ul.errorlist').remove();
                                             $('#' + key).parent().before('<ul class="errorlist"><li>' + val + '</li></ul>');
@@ -96,14 +97,14 @@
                                         if(field) {
                                             if(field == key && $('#' + field).val().length > 0) {
                                                 if(settings.fieldInvalidCallback) {
-                                                    fieldInvalidCallback($('#' + field));
+                                                    settings.fieldInvalidCallback($('#' + field));
                                                 }
                                                 $('#' + field).siblings("ul.errorlist").remove();
                                                 $('#' + key).before('<ul class="errorlist"><li>' + val + '</li></ul>');
                                             }
                                         } else {
                                             if(settings.fieldInvalidCallback) {
-                                                fieldInvalidCallback($('#' + field));
+                                                settings.fieldInvalidCallback($('#' + field));
                                             }
                                             $('#' + field).siblings("ul.errorlist").remove();
                                             $('#' + key).before('<ul class="errorlist"><li>' + val + '</li></ul>');
@@ -125,14 +126,14 @@
                                         if(field) {
                                             if(field == key && $('#' + field).val().length > 0) {
                                                 if(settings.fieldInvalidCallback) {
-                                                    fieldInvalidCallback($('#' + field));
+                                                    settings.fieldInvalidCallback($('#' + field));
                                                 }
                                                 $('#' + field).siblings('ul.errorlist').remove();
                                                 $('#' + key).prev().before('<ul class="errorlist"><li>' + val + '</li></ul>');
                                             }
                                         } else {
                                             if(settings.fieldInvalidCallback) {
-                                                fieldInvalidCallback($('#' + field));
+                                                settings.fieldInvalidCallback($('#' + field));
                                             }
                                             visibleErrors[key] = val;
                                             $('#' + key).prev().before('<ul class="errorlist"><li>' + val + '</li></ul>');
