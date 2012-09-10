@@ -135,7 +135,6 @@
                                             if(settings.fieldInvalidCallback) {
                                                 settings.fieldInvalidCallback($('#' + field));
                                             }
-                                            visibleErrors[key] = val;
                                             $('#' + key).prev().before('<ul class="errorlist"><li>' + val + '</li></ul>');
                                         }
                                     }
