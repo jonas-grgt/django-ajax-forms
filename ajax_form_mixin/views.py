@@ -4,9 +4,14 @@ from django.utils import simplejson
 from django.views.decorators.http import require_POST
 from django.forms.formsets import BaseFormSet
 from django.views.generic.edit import BaseFormView
+from django.views.generic.edit import BaseCreateView
 from django.views.generic import FormView
 from django.views.generic.edit import FormMixin
+from django.views.generic import View
+from django.views.generic.edit import ModelFormMixin
 from django.views.generic.edit import TemplateResponseMixin
+from django.views.generic.edit import ProcessFormView
+from django.views.generic.edit import SingleObjectMixin
 
 from ajax_form_mixin.utils import LazyEncoder
 
@@ -20,7 +25,32 @@ class JSONResponseMixin(object):
     def convert_context_to_json(self, context):
         return simplejson.dumps(context)
 
-class AjaxValidatingFormMixin(JSONResponseMixin, TemplateResponseMixin):
+class RealSubmitMixin(object):
+    def is_actual_submit(self):
+        if self.request.POST.get('submit') == 'true':
+            return True
+        return False
+
+class AjaxValidFormMixin(RealSubmitMixin):
+    def form_valid(self, form):
+        if self.is_actual_submit() and getattr(self, 'form_is_valid', False):
+            self.form_submitted(form)
+        return self.render_to_json_response({ 'valid': True, 'submitted': True })
+
+class AjaxValidModelFormMixin(RealSubmitMixin):
+    def singleObjectModelToDict(self, object):
+        subObject = object.__dict__
+        del subObject['_state']
+        return subObject
+
+    def form_valid(self, form):
+        self.object = form.save()
+        if self.is_actual_submit() and getattr(self, 'form_is_valid', False):
+            self.form_submitted(form)
+            return self.render_to_json_response({ 'valid': True, 'object': self.singleObjectModelToDict(self.object)})
+        return self.render_to_json_response({ 'valid': True })
+
+class AjaxInvalidFormMixin(JSONResponseMixin, TemplateResponseMixin):
     def get_form_class(self):
         """
         A form_class can either be defined by inheriting from AjaxValidatingForm and setting the 
@@ -31,10 +61,6 @@ class AjaxValidatingFormMixin(JSONResponseMixin, TemplateResponseMixin):
             form_class = self.kwargs["form_class"]
         return form_class
 
-    def form_valid(self, form):
-        if getattr(self, 'form_is_valid', False):
-            self.form_is_valid(form)
-        return self.render_to_json_response({ 'valid': True })
 
     def form_invalid(self, form):
         # Get the BoundFields which contains the errors attribute 
@@ -69,3 +95,9 @@ class AjaxValidatingFormMixin(JSONResponseMixin, TemplateResponseMixin):
             'errors': final_errors,
         }
         return self.render_to_json_response(data)
+
+class AjaxFormView(FormView, AjaxValidFormMixin, AjaxInvalidFormMixin):
+    pass
+
+class AjaxModelFormView(AjaxValidModelFormMixin, AjaxInvalidFormMixin, BaseCreateView):
+    pass
