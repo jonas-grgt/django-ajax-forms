@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='django-ajax-validation',
+    name='django-ajax-form-mixin',
     version='0.0.2',
     description='Provides support for doing validation using Ajax(currently with jQuery) using your existing Django forms.',
     author='Jonas Geiregat',
