@@ -4,7 +4,7 @@ setup(
     name='django-ajax-validation',
     version='0.0.2',
     description='Provides support for doing validation using Ajax(currently with jQuery) using your existing Django forms.',
-    author='Alex Gaynor',
+    author='Jonas Geiregat',
     author_email='jonas@geiregat.org',
     url='https://github.com/jonasgeiregat/django-ajax-form-mixin',
     packages=find_packages(),
