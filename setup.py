@@ -7,7 +7,10 @@ setup(
     author='Jonas Geiregat',
     author_email='jonas@geiregat.org',
     url='https://github.com/jonasgeiregat/django-ajax-form-mixin',
-    packages=find_packages(),
+    packages=[
+            'ajax_form_mixin',
+            'ajax_form_mixin.templatetags',
+        ],
     classifiers=[
         'Development Status :: 1 - Alpha',
         'Environment :: Web Environment',
