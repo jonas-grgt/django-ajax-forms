@@ -32,8 +32,8 @@ class AjaxValidatingFormMixin(JSONResponseMixin, TemplateResponseMixin):
         return form_class
 
     def form_valid(self, form):
-        if getattr(self, 'form_is_valid'):
-            self.form_is_valid(self, form)
+        if getattr(self, 'form_is_valid', False):
+            self.form_is_valid(form)
         return self.render_to_json_response({ 'valid': True })
 
     def form_invalid(self, form):
