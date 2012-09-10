@@ -33,9 +33,14 @@ class RealSubmitMixin(object):
 
 class AjaxValidFormMixin(RealSubmitMixin):
     def form_valid(self, form):
+        response = None
+        if self.is_actual_submit():
+            response = self.render_to_json_response({ 'valid': True, 'submitted': True })
         if self.is_actual_submit() and getattr(self, 'form_is_valid', False):
             self.form_submitted(form)
-        return self.render_to_json_response({ 'valid': True, 'submitted': True })
+        if not response:
+            return self.render_to_json_response({ 'valid': True })
+        return response
 
 class AjaxValidModelFormMixin(RealSubmitMixin):
     def singleObjectModelToDict(self, object):
