@@ -23,6 +23,7 @@ With the following View::
             """
             This method is called whenever a form has been validated successfully.
             If you don't implement this method, this method will not be called.
+            This method can be used to do some extra work, such as sending an email in this case.
             """
 
 And the following urls configuration::
@@ -71,5 +72,6 @@ from google).
 
 The AjaxValidatingFormMixin only overwrites the post handler. 
 So a normal GET request will serve the renderd form as defined in contact-form.html, as usual.
-POST request will validate the form and return a JSON response dictionary. 
-The response will be handled by the jQuery plugin.
+POST request will validate the form and return a JSON response dictionary. If the form is invalid the dictionary will contain an other dictionary of errors, listing the fields that have been marked as invalid.
+You can implement one method form_is_valid, which is triggered from from_valid before rendering the json response. In this method you can do additional tasks, such as sending an email.
+The response will be handled by the jQuery plugin. 
