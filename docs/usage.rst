@@ -19,6 +19,12 @@ With the following View::
         template_name = "contact-form.html"
         form_class = ContactForm
 
+        def form_is_valid(self, form):
+            """
+            This method is called whenever a form has been validated successfully.
+            If you don't implement this method, this method will not be called.
+            """
+
 And the following urls configuration::
 
     url(r'^contact/$', ContactFormView.as_view(), name="contact_form"),
