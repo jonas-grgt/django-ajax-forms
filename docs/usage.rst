@@ -53,7 +53,7 @@ And then in the template in which you are displaying the form, you should add::
         });
     </script>
 
-For ModelForms, the same pattern goes, except your inherit from AjaxModelFormView:
+For ModelForms, the same pattern goes, except your inherit from AjaxModelFormView::
     
     class ContactModelForm(forms.ModelForm):
         class Meta:
