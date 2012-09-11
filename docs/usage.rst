@@ -15,13 +15,13 @@ For example, if you had the following form::
 
 With the following View::
 
-    class ContactFormView(FormView, AjaxValidatingFormMixin):
+    class ContactFormView(AjaxFormView):
         template_name = "contact-form.html"
         form_class = ContactForm
 
         def form_is_valid(self, form):
             """
-            This method is called whenever a form has been validated successfully.
+            This method is called whenever a form has been validated successfully and the submit button has been pressed.
             If you don't implement this method, this method will not be called.
             This method can be used to do some extra work, such as sending an email in this case.
             """
@@ -52,6 +52,17 @@ And then in the template in which you are displaying the form, you should add::
 
         });
     </script>
+
+For ModelForms, the same pattern goes, except your inherit from AjaxModelFormView:
+    
+    class ContactModelForm(forms.ModelForm):
+        class Meta:
+            model = Contact
+
+    class ContactView(AjaxModelFormView):
+        template_name = "contact-model-form.html"
+        form_class = ContactForm
+        model = Contact
 
 As you can see, you need to have jQuery for this to work(here it is being loaded
 from google). 
