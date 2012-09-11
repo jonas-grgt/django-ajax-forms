@@ -13,7 +13,7 @@ from django.views.generic.edit import TemplateResponseMixin
 from django.views.generic.edit import ProcessFormView
 from django.views.generic.edit import SingleObjectMixin
 
-from ajax_form_mixin.utils import LazyEncoder
+from ajax_forms.utils import LazyEncoder
 
 class JSONResponseMixin(object):
     def render_to_json_response(self, context):
