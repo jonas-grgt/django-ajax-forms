@@ -1,4 +1,7 @@
-* Copyright (c) 2009, Alex Gaynor
+* Copyright (c) 2012, Jonas Geiregat
+* Some code has been taken from Alex Gaynor's django-ajax-validation. 
+* which is also distributed under the same license.
+*
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
