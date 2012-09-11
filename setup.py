@@ -1,15 +1,15 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='django-ajax-form-mixin',
+    name='django-ajax-forms',
     version='0.0.2',
     description='Provides support for doing validation using Ajax(currently with jQuery) using your existing Django forms.',
     author='Jonas Geiregat',
     author_email='jonas@geiregat.org',
-    url='https://github.com/jonasgeiregat/django-ajax-form-mixin',
+    url='https://github.com/jonasgeiregat/django-ajax-forms',
     packages=[
-            'ajax_form_mixin',
-            'ajax_form_mixin.templatetags',
+            'ajax_forms',
+            'ajax_forms.templatetags',
         ],
     classifiers=[
         'Development Status :: 1 - Alpha',
