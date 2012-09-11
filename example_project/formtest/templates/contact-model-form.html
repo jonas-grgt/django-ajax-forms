@@ -1,0 +1,30 @@
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
+    {% load jquery_validation %}
+    {% include_validation %}
+<script type="text/javascript">
+    $(function()    {
+            $('#form').validate('{% url contact_model_form %}', 
+                { 
+                    type: 'p', 
+                    fields: true, 
+                    event: 'focusout', 
+                    fieldSuccessCallback: function(field) {
+                        if(field.next("span").length == 0) {
+                            field.after("<span class=\"ico-ok\">ok</span>");
+                        }
+                    },
+                    formSuccessCallback: function(form) {
+                    },
+                    fieldInvalidCallback: function(field) {
+                        if(field.next("span").length > 0) {
+                            field.next("span").remove();
+                        }
+                    }
+                }
+            );
+    });
+</script>
+<form id="form" method="POST">{% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="go"/>
+</form>
