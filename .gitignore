@@ -1,10 +1,45 @@
-*.log
-*.pot
+# Homepage #
+#################
+
+.gitignore
+settings.py
+example_project/example_project.db
+.DS_Store
+
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
 *.pyc
-local_settings.py
 
-# Ignore documenation build data
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
 
-docs/_*
-docs/build
-docs/Makefile
+# Logs , Swap Files and databases #
+######################
+*.log
+*.sql
+*.sqlite
+*.swp
+
+# OS generated files #
+######################
+.DS_Store?
+ehthumbs.db
+Icon?
+Thumbs.db
+
