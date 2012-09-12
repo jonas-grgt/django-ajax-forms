@@ -15,6 +15,8 @@ from django.views.generic.edit import SingleObjectMixin
 
 from ajax_forms.utils import LazyEncoder
 
+FORM_SUBMITTED = "valid_submit"
+
 class JSONResponseMixin(object):
     def render_to_json_response(self, context):
         return self.get_json_response(self.convert_context_to_json(context))
@@ -36,8 +38,9 @@ class AjaxValidFormMixin(RealSubmitMixin):
         response = None
         if self.is_actual_submit():
             response = self.render_to_json_response({ 'valid': True, 'submitted': True })
-        if self.is_actual_submit() and getattr(self, 'form_is_valid', False):
+        if self.is_actual_submit() and getattr(self, FORM_SUBMITTED, False):
             self.form_submitted(form)
+
         if not response:
             return self.render_to_json_response({ 'valid': True })
         return response
@@ -49,10 +52,17 @@ class AjaxValidModelFormMixin(RealSubmitMixin):
         return subObject
 
     def form_valid(self, form):
-        self.object = form.save()
-        if self.is_actual_submit() and getattr(self, 'form_is_valid', False):
+        self.object = None
+        form_submit = getattr(self, FORM_SUBMITTED, False)
+
+        if self.is_actual_submit():
+            self.object = form.save()
+        if form_submit and self.is_actual_submit():
             self.form_submitted(form)
-            return self.render_to_json_response({ 'valid': True, 'object': self.singleObjectModelToDict(self.object)})
+
+        if self.object:
+            return self.render_to_json_response({ 'valid': True, 'submitted': True, 'object': self.singleObjectModelToDict(self.object)})
+
         return self.render_to_json_response({ 'valid': True })
 
 class AjaxInvalidFormMixin(JSONResponseMixin, TemplateResponseMixin):
@@ -101,7 +111,7 @@ class AjaxInvalidFormMixin(JSONResponseMixin, TemplateResponseMixin):
         }
         return self.render_to_json_response(data)
 
-class AjaxFormView(FormView, AjaxValidFormMixin, AjaxInvalidFormMixin):
+class AjaxFormView(AjaxValidFormMixin, AjaxInvalidFormMixin, FormView):
     pass
 
 class AjaxModelFormView(AjaxValidModelFormMixin, AjaxInvalidFormMixin, BaseCreateView):

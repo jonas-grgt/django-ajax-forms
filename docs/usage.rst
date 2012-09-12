@@ -19,12 +19,13 @@ With the following View::
         template_name = "contact-form.html"
         form_class = ContactForm
 
-        def form_is_valid(self, form):
+        def valid_submit(self, form):
             """
             This method is called whenever a form has been validated successfully and the submit button has been pressed.
             If you don't implement this method, this method will not be called.
             This method can be used to do some extra work, such as sending an email in this case.
             """
+            pass
 
 And the following urls configuration::
 
@@ -63,6 +64,13 @@ For ModelForms, the same pattern goes, except your inherit from AjaxModelFormVie
         template_name = "contact-model-form.html"
         form_class = ContactForm
         model = Contact
+
+        def valid_submit(self, form):
+            """
+            Some goes here as for AjaxFormView
+            """
+
+AjaxModelFormView inherits from BaseCreateView, which saves the form through the defined model. This behaviour hasn't changed. There is no need to save your form in the valid_submit method. 
 
 As you can see, you need to have jQuery for this to work(here it is being loaded
 from google). 
