@@ -116,6 +116,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'ajax_forms',
+    'ajax_forms.tests',
     'formtest',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
