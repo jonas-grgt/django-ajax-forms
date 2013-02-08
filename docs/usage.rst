@@ -44,7 +44,7 @@ And then in the template in which you are displaying the form, you should add::
                               type: 'ul', 
                               fields: ['id_email'], 
                               event: 'focusout',
-                              successCallback: function(field) {
+                              fieldSuccessCallback: function(field) {
                                   if(field.next("span").length == 0) {
                                       field.after("<span class=\"ico-ok\">ok</span>");
                                   }
