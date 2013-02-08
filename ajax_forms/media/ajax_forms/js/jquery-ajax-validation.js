@@ -116,7 +116,7 @@
                                 if(!data.errors[field] && settings.fieldSuccessCallback) {
                                     $('#' + field).siblings('ul.errorlist').remove();
                                     // Clear errors for this field if present
-                                    setttings.fieldSuccessCallback($('#' + field));
+                                    settings.fieldSuccessCallback($('#' + field));
                                 }
                                 $.each(data.errors, function(key, val)  {
                                     if (key.indexOf('__all__') >= 0)   {
