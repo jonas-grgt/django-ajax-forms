@@ -162,7 +162,7 @@
                 });
             } else {
                 var form = $(this);
-                $('input, checkbox, select',this).not('input[type=submit]').each(function(index, el) {
+                $('input, checkbox, select, textarea',this).not('input[type=submit]').each(function(index, el) {
                     $(el).on(settings.event, function(event) {
                         field = $(this).attr("id");
                         ajaxForm($(form), $(form).serialize(), field, null);
