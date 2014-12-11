@@ -1,6 +1,10 @@
+try:
+    import json
+except ImportError:
+    from django.utils import simplejson as json
+
 from django import forms
 from django.http import HttpResponse
-from django.utils import simplejson
 from django.views.decorators.http import require_POST
 from django.forms.formsets import BaseFormSet
 from django.views.generic.edit import BaseFormView
@@ -25,7 +29,7 @@ class JSONResponseMixin(object):
         return HttpResponse(content, content_type='application/json', **httpresponse_kwargs)
 
     def convert_context_to_json(self, context):
-        return simplejson.dumps(context)
+        return json.dumps(context)
 
 class RealSubmitMixin(object):
     def is_actual_submit(self):
@@ -68,7 +72,7 @@ class AjaxValidModelFormMixin(RealSubmitMixin):
 class AjaxInvalidFormMixin(JSONResponseMixin, TemplateResponseMixin):
     def get_form_class(self):
         """
-        A form_class can either be defined by inheriting from AjaxValidatingForm and setting the 
+        A form_class can either be defined by inheriting from AjaxValidatingForm and setting the
         form_class property or by adding the form_class in the url definition.
         """
         form_class = getattr(self, "form_class", False)
@@ -78,7 +82,7 @@ class AjaxInvalidFormMixin(JSONResponseMixin, TemplateResponseMixin):
 
 
     def form_invalid(self, form):
-        # Get the BoundFields which contains the errors attribute 
+        # Get the BoundFields which contains the errors attribute
         if isinstance(form, BaseFormSet):
             errors = {}
             formfields = {}
