@@ -1,7 +1,7 @@
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
-from forms import ContactForm
+from .forms import ContactForm
 
 class AjaxFormViewTest(TestCase):
     urls = 'ajax_forms.tests.urls'

@@ -2,7 +2,6 @@
 #################
 
 .gitignore
-settings.py
 example_project/example_project.db
 .DS_Store
 
