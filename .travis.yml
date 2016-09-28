@@ -1,0 +1,33 @@
+sudo: false
+
+language: python
+
+python:
+  - "2.7"
+  - "3.5"
+
+env:
+  - DJANGO_VERSION="Django<1.8"
+  - DJANGO_VERSION="Django<1.9"
+  - DJANGO_VERSION="Django<1.10"
+  - DJANGO_VERSION="Django<1.11"
+  - DJANGO_VERSION='https://github.com/django/django/archive/master.tar.gz'
+
+matrix:
+  exclude:
+    - python: "3.5"
+      env: DJANGO_VERSION="Django<1.8"
+  allow_failures:
+    - env: DJANGO_VERSION='https://github.com/django/django/archive/master.tar.gz'
+
+cache:
+  directories:
+    - $HOME/.cache/pip
+
+install:
+  - pip install -q "$DJANGO_VERSION"
+
+script:
+  - export DJANGO_SETTINGS_MODULE="ajax_forms.tests.settings"
+  - export PYTHONPATH="."
+  - python -Wall $VIRTUAL_ENV/bin/django-admin test

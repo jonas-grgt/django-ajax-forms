@@ -1,1 +1,1 @@
-from tests import *
+from ajax_forms.tests import *
