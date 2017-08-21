@@ -2,7 +2,7 @@
 Usage
 =====
 
-To use django-ajax-formmixin, it requires you add a the AjaxFormMixin to your FromView, and some javascript to any page with the form.
+To use django-ajax-formmixin, it requires you add a the AjaxFormMixin to your FormView, and some javascript to any page with the form.
 
 For example, if you had the following form::
 
